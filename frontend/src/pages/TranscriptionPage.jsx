@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { BarChart3, Download, MessageSquare, Clock, User } from 'lucide-react'
-import axios from 'axios'
+import api from '../lib/api'
 
 export default function TranscriptionPage() {
   const { sessionId } = useParams()
   const [session, setSession] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
   const [chatQuestion, setChatQuestion] = useState('')
   const [chatAnswer, setChatAnswer] = useState(null)
+  const [chatError, setChatError] = useState('')
   const [selectedSpeaker, setSelectedSpeaker] = useState('all')
 
   useEffect(() => {
@@ -17,10 +19,13 @@ export default function TranscriptionPage() {
 
   const fetchSession = async () => {
     try {
-      const response = await axios.get(`/api/transcription/session/${sessionId}`)
+      setError('')
+      const response = await api.get(`/api/transcription/session/${sessionId}`)
       setSession(response.data)
     } catch (error) {
       console.error('Error fetching session:', error)
+      const message = error?.response?.data?.detail || 'Failed to load session.'
+      setError(message)
     } finally {
       setLoading(false)
     }
@@ -31,19 +36,22 @@ export default function TranscriptionPage() {
     if (!chatQuestion.trim()) return
 
     try {
-      const response = await axios.post('/api/chatbot/ask', {
+      setChatError('')
+      const response = await api.post('/api/chatbot/ask', {
         session_id: sessionId,
         question: chatQuestion
       })
       setChatAnswer(response.data.answer)
     } catch (error) {
       console.error('Chat error:', error)
+      const message = error?.response?.data?.detail || 'Chatbot failed to answer.'
+      setChatError(message)
     }
   }
 
   const handleExport = async (format) => {
     try {
-      const response = await axios.get(`/api/export/${format}/${sessionId}`, {
+      const response = await api.get(`/api/export/${format}/${sessionId}`, {
         responseType: 'blob'
       })
       
@@ -56,6 +64,8 @@ export default function TranscriptionPage() {
       link.remove()
     } catch (error) {
       console.error('Export error:', error)
+      const message = error?.response?.data?.detail || 'Export failed.'
+      setError(message)
     }
   }
 
@@ -64,7 +74,7 @@ export default function TranscriptionPage() {
   }
 
   if (!session) {
-    return <div className="text-center text-white">Session not found</div>
+    return <div className="text-center text-white">{error || 'Session not found'}</div>
   }
 
   const filteredSegments = selectedSpeaker === 'all'
@@ -202,6 +212,12 @@ export default function TranscriptionPage() {
             {chatAnswer && (
               <div className="mt-4 p-3 bg-blue-500/10 border border-blue-500/30 rounded-lg">
                 <p className="text-gray-300">{chatAnswer}</p>
+              </div>
+            )}
+
+            {chatError && (
+              <div className="mt-3 text-sm text-red-300 bg-red-500/10 border border-red-500/30 rounded-lg px-3 py-2">
+                {chatError}
               </div>
             )}
           </div>

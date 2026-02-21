@@ -72,20 +72,30 @@ Format your response as JSON:
             "action_items": []
         }
     
-    def extract_keywords(self, transcript: str) -> List[Dict]:
-        """Extract important keywords, names, dates, decisions"""
+    def extract_keywords(self, transcript: str, segments: List[Dict]) -> List[Dict]:
+        """Extract important keywords with a rough timestamp from segments."""
         keywords = []
-        
+
         # Simple keyword extraction (can be enhanced with NER)
         important_words = ['decided', 'action', 'deadline', 'important', 'critical', 'must', 'will']
-        
+        transcript_lower = transcript.lower()
+
         for word in important_words:
-            if word in transcript.lower():
-                keywords.append({
-                    "word": word,
-                    "category": "important"
-                })
-        
+            if word not in transcript_lower:
+                continue
+
+            timestamp = 0.0
+            for seg in segments:
+                if word in seg.get("text", "").lower():
+                    timestamp = float(seg.get("start_time", 0.0))
+                    break
+
+            keywords.append({
+                "word": word,
+                "timestamp": timestamp,
+                "category": "important"
+            })
+
         return keywords
 
 # Singleton instance

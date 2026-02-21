@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Clock, Globe, FileText } from 'lucide-react'
-import axios from 'axios'
+import api from '../lib/api'
 
 export default function SessionsPage() {
   const [sessions, setSessions] = useState([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
 
   useEffect(() => {
     fetchSessions()
@@ -13,10 +14,13 @@ export default function SessionsPage() {
 
   const fetchSessions = async () => {
     try {
-      const response = await axios.get('/api/transcription/sessions')
+      setError('')
+      const response = await api.get('/api/transcription/sessions')
       setSessions(response.data.sessions)
     } catch (error) {
       console.error('Error fetching sessions:', error)
+      const message = error?.response?.data?.detail || 'Failed to load sessions.'
+      setError(message)
     } finally {
       setLoading(false)
     }
@@ -24,6 +28,10 @@ export default function SessionsPage() {
 
   if (loading) {
     return <div className="text-center text-white">Loading sessions...</div>
+  }
+
+  if (error) {
+    return <div className="text-center text-white">{error}</div>
   }
 
   return (

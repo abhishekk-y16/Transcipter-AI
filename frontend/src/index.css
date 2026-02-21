@@ -9,8 +9,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #0a0a0a;
-  color: #e0e0e0;
+  background-color: #f8fafc;
+  color: #1e293b;
 }
 
 code {
@@ -24,39 +24,52 @@ code {
 }
 
 ::-webkit-scrollbar-track {
-  background: #1a1a1a;
+  background: #f1f5f9;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #2a2a2a;
+  background: #cbd5e1;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #3a3a3a;
+  background: #94a3b8;
 }
 
 /* Custom Components */
 .card {
+  @apply bg-white border border-slate-200 rounded-lg p-6;
+}
+
+.dark-card {
   @apply bg-dark-card border border-dark-border rounded-lg p-6;
 }
 
 .btn-primary {
-  @apply px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors flex items-center space-x-2;
+  @apply px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors flex items-center space-x-2;
 }
 
 .btn-secondary {
-  @apply px-4 py-2 bg-dark-card hover:bg-dark-border text-white rounded-lg font-medium transition-colors flex items-center space-x-2 border border-dark-border;
+  @apply px-4 py-2 bg-white hover:bg-slate-100 text-slate-900 rounded-lg font-medium transition-colors flex items-center space-x-2 border border-slate-200;
 }
 
 .input {
+  @apply w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors;
+}
+
+.input-dark {
   @apply w-full px-4 py-2 bg-dark-card border border-dark-border rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 transition-colors;
 }
 
 .upload-card {
-  @apply card cursor-pointer hover:border-blue-500/50 transition-all text-center py-12 border-2 border-dashed;
+  @apply bg-white border border-slate-300 rounded-lg p-6 cursor-pointer hover:border-blue-400 hover:bg-blue-50/50 transition-all text-center py-12 border-2 border-dashed;
 }
 
 .nav-link {
   @apply flex items-center space-x-2 px-4 py-2 text-gray-300 hover:text-white hover:bg-dark-border rounded-lg transition-colors;
 }
+
+.nav-link-light {
+  @apply flex items-center space-x-2 px-3 py-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors font-medium;
+}
+

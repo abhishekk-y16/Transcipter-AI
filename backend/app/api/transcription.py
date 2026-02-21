@@ -14,6 +14,7 @@ import logging
 from app.services.transcription_service import get_transcription_service
 from app.services.emotion_service import get_emotion_service
 from app.services.summary_service import get_summary_service
+from app.services.diarization_service import get_diarization_service
 from app.core.database import get_collection
 from app.models.schemas import TranscriptionResponse
 
@@ -54,39 +55,43 @@ async def upload_audio(file: UploadFile = File(...)):
         # Step 2: Detect emotions for each segment
         emotion_service = get_emotion_service()
         segments = []
-        
+
         for seg in transcription_result['segments']:
             emotion_data = emotion_service.detect_emotion(
                 file_path,
                 start_time=seg['start'],
                 end_time=seg['end']
             )
-            
+
             segments.append({
                 "text": seg['text'],
                 "start_time": seg['start'],
                 "end_time": seg['end'],
-                "speaker": "Speaker 1",  # Will be updated by diarization
+                "speaker": "Speaker 1",
                 "emotion": emotion_data['emotion'],
                 "confidence": seg.get('confidence', 0.9)
             })
+
+        # Step 3: Identify speakers and assign to segments
+        diarization_service = get_diarization_service()
+        speaker_segments = diarization_service.identify_speakers(file_path)
+
+        if speaker_segments:
+            for seg in segments:
+                seg["speaker"] = _match_speaker(seg, speaker_segments)
         
-        # Step 3: Generate summary and action items
+        # Step 4: Generate summary and action items
         summary_service = get_summary_service()
         full_transcript = transcription_result['text']
-        summary_data = summary_service.generate_summary(full_transcript, [{"speaker_id": "Speaker 1"}])
-        keywords = summary_service.extract_keywords(full_transcript)
-        
-        # Step 4: Prepare response
+        speakers = _build_speaker_stats(segments)
+        summary_data = summary_service.generate_summary(full_transcript, speakers)
+        keywords = summary_service.extract_keywords(full_transcript, segments)
+
+        # Step 5: Prepare response
         response_data = {
             "session_id": session_id,
             "segments": segments,
-            "speakers": [{
-                "speaker_id": "Speaker 1",
-                "total_duration": segments[-1]['end_time'] if segments else 0,
-                "segment_count": len(segments),
-                "emotion_distribution": {}
-            }],
+            "speakers": speakers,
             "keywords": keywords,
             "summary": summary_data.get('summary'),
             "action_items": summary_data.get('action_items', []),
@@ -95,7 +100,7 @@ async def upload_audio(file: UploadFile = File(...)):
             "created_at": datetime.utcnow()
         }
         
-        # Step 5: Save to database
+        # Step 6: Save to database
         collection = get_collection("transcriptions")
         await collection.insert_one({**response_data, "_id": session_id})
         
@@ -169,3 +174,49 @@ async def get_session(session_id: str):
         raise HTTPException(status_code=404, detail="Session not found")
     
     return session
+
+
+def _match_speaker(segment: dict, speaker_segments: List[dict]) -> str:
+    """Pick the diarized speaker with the largest time overlap."""
+    start_time = segment.get("start_time", 0.0)
+    end_time = segment.get("end_time", 0.0)
+
+    best_speaker = "Speaker 1"
+    best_overlap = 0.0
+
+    for speaker_seg in speaker_segments:
+        overlap = max(
+            0.0,
+            min(end_time, speaker_seg.get("end", 0.0)) - max(start_time, speaker_seg.get("start", 0.0))
+        )
+        if overlap > best_overlap:
+            best_overlap = overlap
+            best_speaker = speaker_seg.get("speaker", best_speaker)
+
+    return best_speaker
+
+
+def _build_speaker_stats(segments: List[dict]) -> List[dict]:
+    """Aggregate speaker stats used by analytics and UI."""
+    speaker_data = {}
+
+    for seg in segments:
+        speaker = seg.get("speaker", "Unknown")
+        duration = seg.get("end_time", 0.0) - seg.get("start_time", 0.0)
+        emotion = seg.get("emotion", "neutral")
+
+        if speaker not in speaker_data:
+            speaker_data[speaker] = {
+                "speaker_id": speaker,
+                "total_duration": 0.0,
+                "segment_count": 0,
+                "emotion_distribution": {}
+            }
+
+        speaker_data[speaker]["total_duration"] += duration
+        speaker_data[speaker]["segment_count"] += 1
+        speaker_data[speaker]["emotion_distribution"][emotion] = (
+            speaker_data[speaker]["emotion_distribution"].get(emotion, 0) + 1
+        )
+
+    return list(speaker_data.values())

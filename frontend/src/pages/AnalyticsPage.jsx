@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
 import { BarChart, Bar, PieChart, Pie, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Cell, ResponsiveContainer } from 'recharts'
-import axios from 'axios'
+import api from '../lib/api'
 
 const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899']
 
@@ -10,6 +10,7 @@ export default function AnalyticsPage() {
   const { sessionId } = useParams()
   const [analytics, setAnalytics] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
 
   useEffect(() => {
     fetchAnalytics()
@@ -17,10 +18,13 @@ export default function AnalyticsPage() {
 
   const fetchAnalytics = async () => {
     try {
-      const response = await axios.get(`/api/analytics/${sessionId}`)
+      setError('')
+      const response = await api.get(`/api/analytics/${sessionId}`)
       setAnalytics(response.data)
     } catch (error) {
       console.error('Error fetching analytics:', error)
+      const message = error?.response?.data?.detail || 'Failed to load analytics.'
+      setError(message)
     } finally {
       setLoading(false)
     }
@@ -31,7 +35,7 @@ export default function AnalyticsPage() {
   }
 
   if (!analytics) {
-    return <div className="text-center text-white">Analytics not available</div>
+    return <div className="text-center text-white">{error || 'Analytics not available'}</div>
   }
 
   // Prepare data for charts
