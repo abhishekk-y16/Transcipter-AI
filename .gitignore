@@ -54,3 +54,16 @@ models/
 tmp/
 temp/
 *.tmp
+
+# Docs to keep local only
+ARCHITECTURE.md
+CHECKLIST.md
+DEMO.md
+FEATURES.md
+INDEX.md
+GET_STARTED.md
+PROJECT_SUMMARY.md
+QUICK_START.md
+SETUP.md
+SYSTEM_FLOW.md
+WHAT_WE_BUILT.md
