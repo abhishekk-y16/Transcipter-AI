@@ -9,36 +9,9 @@ import SessionsPage from './pages/SessionsPage'
 function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100">
-        {/* Navigation */}
-        <nav className="bg-white border-b border-slate-200 sticky top-0 z-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between h-16">
-              <div className="flex items-center">
-                <Link to="/" className="flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-blue-400 rounded-lg flex items-center justify-center">
-                    <Mic className="w-5 h-5 text-white" />
-                  </div>
-                  <span className="text-lg font-semibold text-slate-900">Transcriber</span>
-                </Link>
-              </div>
-              
-              <div className="flex space-x-1">
-                <Link to="/" className="nav-link-light">
-                  <Upload className="w-4 h-4" />
-                  <span className="hidden sm:inline">Upload</span>
-                </Link>
-                <Link to="/sessions" className="nav-link-light">
-                  <FileText className="w-4 h-4" />
-                  <span className="hidden sm:inline">Sessions</span>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </nav>
-
-        {/* Main Content */}
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div style={{ width: '100vw', height: 'auto', margin: 0, padding: 0, overflow: 'visible' }}>
+        {/* Main Content - Full width and height for fullscreen sequences */}
+        <main style={{ width: '100%', height: 'auto', margin: 0, padding: 0, overflow: 'visible' }}>
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/transcription/:sessionId" element={<TranscriptionPage />} />
