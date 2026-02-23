@@ -9,6 +9,7 @@ import aiofiles
 import os
 import uuid
 from datetime import datetime
+import json
 import logging
 
 from app.services.transcription_service import get_transcription_service
@@ -121,24 +122,45 @@ async def websocket_stream(websocket: WebSocket):
     await websocket.accept()
     logger.info("WebSocket connection established")
     
-    transcription_service = get_transcription_service()
+    transcription_service = get_transcription_service("medium")
     session_id = str(uuid.uuid4())
+    buffer = bytearray()
+    mime_type = "audio/webm"
+
+    await websocket.send_json({
+        "session_id": session_id,
+        "event": "session"
+    })
     
     try:
         while True:
-            # Receive audio chunk from client
-            audio_data = await websocket.receive_bytes()
-            
-            # Transcribe chunk
-            text = transcription_service.transcribe_stream(audio_data)
-            
-            if text:
-                # Send transcription back to client
-                await websocket.send_json({
-                    "session_id": session_id,
-                    "text": text,
-                    "timestamp": datetime.utcnow().isoformat()
-                })
+            message = await websocket.receive()
+
+            if message.get("type") == "websocket.disconnect":
+                break
+
+            if "text" in message and message["text"]:
+                try:
+                    payload = json.loads(message["text"])
+                except Exception:
+                    payload = {}
+
+                event = payload.get("event")
+                if event == "start":
+                    mime_type = payload.get("mimeType", mime_type)
+                elif event == "stop":
+                    text = transcription_service.transcribe_bytes(bytes(buffer), mime_type)
+                    buffer.clear()
+                    await websocket.send_json({
+                        "session_id": session_id,
+                        "text": text,
+                        "event": "final",
+                        "timestamp": datetime.utcnow().isoformat()
+                    })
+                continue
+
+            if "bytes" in message and message["bytes"]:
+                buffer.extend(message["bytes"])
     
     except WebSocketDisconnect:
         logger.info("WebSocket disconnected")

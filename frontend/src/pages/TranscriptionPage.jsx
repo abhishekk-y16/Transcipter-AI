@@ -70,11 +70,19 @@ export default function TranscriptionPage() {
   }
 
   if (loading) {
-    return <div className="text-center text-white">Loading...</div>
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
+        <div className="text-center text-slate-100 text-xl">Loading...</div>
+      </div>
+    )
   }
 
   if (!session) {
-    return <div className="text-center text-white">{error || 'Session not found'}</div>
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
+        <div className="text-center text-slate-100 text-xl">{error || 'Session not found'}</div>
+      </div>
+    )
   }
 
   const filteredSegments = selectedSpeaker === 'all'
@@ -84,12 +92,13 @@ export default function TranscriptionPage() {
   const speakers = [...new Set(session.segments.map(seg => seg.speaker))]
 
   return (
-    <div className="space-y-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-8 px-4">
+      <div className="max-w-7xl mx-auto space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-white">Transcription</h1>
-          <p className="text-gray-400 mt-1">
+          <h1 className="text-3xl font-bold text-slate-100" style={{ textShadow: '0 2px 8px rgba(0, 0, 0, 0.3)' }}>Transcription</h1>
+          <p className="text-slate-300 mt-1" style={{ textShadow: '0 1px 4px rgba(0, 0, 0, 0.3)' }}>
             Session ID: {sessionId} • Duration: {session.duration.toFixed(1)}s • Language: {session.language}
           </p>
         </div>
@@ -97,21 +106,21 @@ export default function TranscriptionPage() {
         <div className="flex space-x-2">
           <Link
             to={`/analytics/${sessionId}`}
-            className="btn-secondary"
+            className="px-4 py-2 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white rounded-lg font-medium transition-all flex items-center space-x-2 shadow-lg"
           >
             <BarChart3 className="w-4 h-4" />
-            Analytics
+            <span>Analytics</span>
           </Link>
           
           <div className="relative group">
-            <button className="btn-primary">
+            <button className="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg font-medium transition-all flex items-center space-x-2 shadow-lg">
               <Download className="w-4 h-4" />
-              Export
+              <span>Export</span>
             </button>
-            <div className="absolute right-0 mt-2 w-32 bg-dark-card border border-dark-border rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
-              <button onClick={() => handleExport('pdf')} className="block w-full text-left px-4 py-2 hover:bg-dark-border text-white">PDF</button>
-              <button onClick={() => handleExport('docx')} className="block w-full text-left px-4 py-2 hover:bg-dark-border text-white">DOCX</button>
-              <button onClick={() => handleExport('txt')} className="block w-full text-left px-4 py-2 hover:bg-dark-border text-white">TXT</button>
+            <div className="absolute right-0 mt-2 w-32 bg-slate-800 border border-slate-700 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10">
+              <button onClick={() => handleExport('pdf')} className="block w-full text-left px-4 py-2 hover:bg-slate-700 text-slate-100 rounded-t-lg transition-colors">PDF</button>
+              <button onClick={() => handleExport('docx')} className="block w-full text-left px-4 py-2 hover:bg-slate-700 text-slate-100 transition-colors">DOCX</button>
+              <button onClick={() => handleExport('txt')} className="block w-full text-left px-4 py-2 hover:bg-slate-700 text-slate-100 rounded-b-lg transition-colors">TXT</button>
             </div>
           </div>
         </div>
@@ -122,18 +131,18 @@ export default function TranscriptionPage() {
         <div className="lg:col-span-2 space-y-6">
           {/* Summary */}
           {session.summary && (
-            <div className="card">
-              <h2 className="text-xl font-semibold text-white mb-3">Summary</h2>
-              <p className="text-gray-300">{session.summary}</p>
+            <div className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6 shadow-xl">
+              <h2 className="text-xl font-semibold text-slate-100 mb-3">Summary</h2>
+              <p className="text-slate-200 leading-relaxed">{session.summary}</p>
               
               {session.action_items && session.action_items.length > 0 && (
                 <div className="mt-4">
-                  <h3 className="text-lg font-semibold text-white mb-2">Action Items</h3>
+                  <h3 className="text-lg font-semibold text-slate-100 mb-2">Action Items</h3>
                   <ul className="space-y-2">
                     {session.action_items.map((item, idx) => (
                       <li key={idx} className="flex items-start space-x-2">
-                        <span className="text-blue-500">•</span>
-                        <span className="text-gray-300">{item.task}</span>
+                        <span className="text-blue-400">•</span>
+                        <span className="text-slate-200">{item.task}</span>
                       </li>
                     ))}
                   </ul>
@@ -143,10 +152,14 @@ export default function TranscriptionPage() {
           )}
 
           {/* Speaker Filter */}
-          <div className="flex space-x-2">
+          <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setSelectedSpeaker('all')}
-              className={`px-4 py-2 rounded-lg ${selectedSpeaker === 'all' ? 'bg-blue-500 text-white' : 'bg-dark-card text-gray-400'}`}
+              className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                selectedSpeaker === 'all' 
+                  ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg' 
+                  : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+              }`}
             >
               All Speakers
             </button>
@@ -154,7 +167,11 @@ export default function TranscriptionPage() {
               <button
                 key={speaker}
                 onClick={() => setSelectedSpeaker(speaker)}
-                className={`px-4 py-2 rounded-lg ${selectedSpeaker === speaker ? 'bg-blue-500 text-white' : 'bg-dark-card text-gray-400'}`}
+                className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                  selectedSpeaker === speaker 
+                    ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg' 
+                    : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                }`}
               >
                 {speaker}
               </button>
@@ -162,25 +179,25 @@ export default function TranscriptionPage() {
           </div>
 
           {/* Transcript Segments */}
-          <div className="card space-y-4">
-            <h2 className="text-xl font-semibold text-white">Transcript</h2>
+          <div className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6 shadow-xl space-y-4">
+            <h2 className="text-xl font-semibold text-slate-100">Transcript</h2>
             
             <div className="space-y-3">
               {filteredSegments.map((segment, idx) => (
-                <div key={idx} className="border-l-4 border-blue-500 pl-4 py-2">
-                  <div className="flex items-center space-x-3 mb-1">
+                <div key={idx} className="border-l-4 border-blue-500 bg-slate-800/50 pl-4 py-3 rounded-r-lg hover:bg-slate-800/70 transition-colors">
+                  <div className="flex flex-wrap items-center gap-2 mb-2">
                     <span className="text-blue-400 font-semibold">{segment.speaker}</span>
-                    <span className="text-gray-500 text-sm">
-                      <Clock className="w-3 h-3 inline mr-1" />
+                    <span className="text-slate-400 text-sm flex items-center">
+                      <Clock className="w-3 h-3 mr-1" />
                       {segment.start_time.toFixed(1)}s
                     </span>
                     {segment.emotion && (
-                      <span className={`text-xs px-2 py-1 rounded ${getEmotionColor(segment.emotion)}`}>
+                      <span className={`text-xs px-2 py-1 rounded font-medium ${getEmotionColor(segment.emotion)}`}>
                         {segment.emotion}
                       </span>
                     )}
                   </div>
-                  <p className="text-gray-300">{segment.text}</p>
+                  <p className="text-slate-200 leading-relaxed">{segment.text}</p>
                 </div>
               ))}
             </div>
@@ -190,8 +207,8 @@ export default function TranscriptionPage() {
         {/* Sidebar */}
         <div className="space-y-6">
           {/* AI Chatbot */}
-          <div className="card">
-            <h2 className="text-xl font-semibold text-white mb-3 flex items-center">
+          <div className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6 shadow-xl">
+            <h2 className="text-xl font-semibold text-slate-100 mb-3 flex items-center">
               <MessageSquare className="w-5 h-5 mr-2" />
               Ask AI
             </h2>
@@ -202,21 +219,21 @@ export default function TranscriptionPage() {
                 value={chatQuestion}
                 onChange={(e) => setChatQuestion(e.target.value)}
                 placeholder="What was decided?"
-                className="input"
+                className="w-full px-4 py-2 bg-slate-900/50 border border-slate-600 rounded-lg text-slate-100 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 transition-all"
               />
-              <button type="submit" className="btn-primary w-full">
+              <button type="submit" className="w-full px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg font-medium transition-all shadow-lg">
                 Ask Question
               </button>
             </form>
             
             {chatAnswer && (
-              <div className="mt-4 p-3 bg-blue-500/10 border border-blue-500/30 rounded-lg">
-                <p className="text-gray-300">{chatAnswer}</p>
+              <div className="mt-4 p-3 bg-blue-500/20 border border-blue-400/40 rounded-lg">
+                <p className="text-slate-100">{chatAnswer}</p>
               </div>
             )}
 
             {chatError && (
-              <div className="mt-3 text-sm text-red-300 bg-red-500/10 border border-red-500/30 rounded-lg px-3 py-2">
+              <div className="mt-3 text-sm text-red-200 bg-red-500/20 border border-red-400/40 rounded-lg px-3 py-2">
                 {chatError}
               </div>
             )}
@@ -237,16 +254,16 @@ export default function TranscriptionPage() {
           )}
 
           {/* Speakers */}
-          <div className="card">
-            <h2 className="text-xl font-semibold text-white mb-3">Speakers</h2>
+          <div className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6 shadow-xl">
+            <h2 className="text-xl font-semibold text-slate-100 mb-3">Speakers</h2>
             <div className="space-y-2">
               {session.speakers.map((speaker, idx) => (
-                <div key={idx} className="flex items-center justify-between p-2 bg-dark-border rounded">
-                  <span className="text-gray-300 flex items-center">
+                <div key={idx} className="flex items-center justify-between p-3 bg-slate-800/50 rounded-lg hover:bg-slate-800/70 transition-colors">
+                  <span className="text-slate-200 flex items-center font-medium">
                     <User className="w-4 h-4 mr-2" />
                     {speaker.speaker_id}
                   </span>
-                  <span className="text-gray-400 text-sm">
+                  <span className="text-slate-300 text-sm">
                     {speaker.total_duration.toFixed(1)}s
                   </span>
                 </div>
@@ -254,6 +271,7 @@ export default function TranscriptionPage() {
             </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   )

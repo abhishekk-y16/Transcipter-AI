@@ -3,6 +3,8 @@ Core transcription service using Whisper
 Handles audio processing and speech-to-text conversion
 """
 import logging
+import os
+import tempfile
 from typing import Dict, List
 
 from app.core.config import settings
@@ -103,6 +105,37 @@ class TranscriptionService:
         except Exception as e:
             logger.error(f"Stream transcription error: {str(e)}")
             return ""
+
+    def transcribe_bytes(self, audio_bytes: bytes, mime_type: str = "audio/webm") -> str:
+        """Transcribe buffered audio bytes by saving to a temp file."""
+        if not audio_bytes:
+            return ""
+
+        extension_map = {
+            "audio/webm": ".webm",
+            "audio/webm;codecs=opus": ".webm",
+            "audio/ogg": ".ogg",
+            "audio/ogg;codecs=opus": ".ogg"
+        }
+        suffix = extension_map.get(mime_type, ".webm")
+
+        temp_path = None
+        try:
+            with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as temp_file:
+                temp_file.write(audio_bytes)
+                temp_path = temp_file.name
+
+            result = self.transcribe_audio(temp_path)
+            return result.get("text", "")
+        except Exception as exc:
+            logger.error(f"Stream bytes transcription error: {str(exc)}")
+            return ""
+        finally:
+            if temp_path and os.path.exists(temp_path):
+                try:
+                    os.remove(temp_path)
+                except OSError:
+                    logger.warning("Failed to remove temp audio file: %s", temp_path)
 
 # Singleton instance
 _transcription_service = None

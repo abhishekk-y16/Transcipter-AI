@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     
     # API Keys
     OPENAI_API_KEY: Optional[str] = None
+    GROQ_API_KEY: Optional[str] = None
     HF_TOKEN: Optional[str] = None
     
     # Security

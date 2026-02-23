@@ -9,6 +9,7 @@ export default function HomePage() {
   const [isRecording, setIsRecording] = useState(false)
   const [dragActive, setDragActive] = useState(false)
   const [uploadError, setUploadError] = useState('')
+  const [uploadProgress, setUploadProgress] = useState(0)
   const [contentOpacity, setContentOpacity] = useState(0)
   const fileInputRef = useRef(null)
   const navigate = useNavigate()
@@ -44,12 +45,17 @@ export default function HomePage() {
 
     setIsUploading(true)
     setUploadError('')
+    setUploadProgress(0)
     const formData = new FormData()
     formData.append('file', file)
 
     try {
       const response = await api.post('/api/transcription/upload', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
+        headers: { 'Content-Type': 'multipart/form-data' },
+        onUploadProgress: (progressEvent) => {
+          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+          setUploadProgress(percentCompleted)
+        }
       })
       
       navigate(`/transcription/${response.data.session_id}`)
@@ -59,6 +65,7 @@ export default function HomePage() {
       setUploadError(message)
     } finally {
       setIsUploading(false)
+      setUploadProgress(0)
     }
   }
 
@@ -83,7 +90,7 @@ export default function HomePage() {
   }
 
   const handleRecording = () => {
-    alert('Live recording feature coming soon! Use WebSocket streaming.')
+    navigate('/live')
   }
 
   return (
@@ -151,16 +158,34 @@ export default function HomePage() {
             />
             
             {isUploading ? (
-              <Loader2 className="w-16 h-16 text-blue-300 animate-spin mx-auto mb-4" />
+              <div className="space-y-4">
+                <Loader2 className="w-16 h-16 text-blue-300 animate-spin mx-auto" />
+                <div className="w-full max-w-xs mx-auto">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm font-semibold text-blue-200">Uploading...</span>
+                    <span className="text-sm font-bold text-blue-100">{uploadProgress}%</span>
+                  </div>
+                  <div className="w-full bg-blue-900/30 rounded-full h-3 overflow-hidden border border-blue-400/30">
+                    <div 
+                      className="bg-gradient-to-r from-blue-400 to-blue-500 h-full rounded-full transition-all duration-300 shadow-lg shadow-blue-500/50"
+                      style={{ width: `${uploadProgress}%` }}
+                    />
+                  </div>
+                </div>
+              </div>
             ) : (
               <Upload className="w-16 h-16 text-blue-300 mx-auto mb-4" />
             )}
             
-            <h3 className="text-2xl font-bold text-white mt-4" style={{ textShadow: '0 2px 8px rgba(0, 0, 0, 0.5)' }}>Upload Audio</h3>
-            <p className="text-blue-100 mt-3 text-base font-semibold" style={{ textShadow: '0 1px 4px rgba(0, 0, 0, 0.5)' }}>
-              Drag & drop or click<br />
-              MP3, WAV, M4A, FLAC
-            </p>
+            {!isUploading && (
+              <>
+                <h3 className="text-2xl font-bold text-white mt-4" style={{ textShadow: '0 2px 8px rgba(0, 0, 0, 0.5)' }}>Upload Audio</h3>
+                <p className="text-blue-100 mt-3 text-base font-semibold" style={{ textShadow: '0 1px 4px rgba(0, 0, 0, 0.5)' }}>
+                  Drag & drop or click<br />
+                  MP3, WAV, M4A, FLAC
+                </p>
+              </>
+            )}
           </div>
 
           {/* Live Recording */}

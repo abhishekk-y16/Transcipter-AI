@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage'
 import TranscriptionPage from './pages/TranscriptionPage'
 import AnalyticsPage from './pages/AnalyticsPage'
 import SessionsPage from './pages/SessionsPage'
+import LiveRecordingPage from './pages/LiveRecordingPage'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             <Route path="/transcription/:sessionId" element={<TranscriptionPage />} />
             <Route path="/analytics/:sessionId" element={<AnalyticsPage />} />
             <Route path="/sessions" element={<SessionsPage />} />
+            <Route path="/live" element={<LiveRecordingPage />} />
           </Routes>
         </main>
       </div>

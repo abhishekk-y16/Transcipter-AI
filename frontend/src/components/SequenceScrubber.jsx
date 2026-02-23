@@ -258,6 +258,29 @@ const SequenceScrubber = () => {
           backfaceVisibility: 'hidden',
         }}
       />
+      <div
+        style={{
+          position: 'fixed',
+          top: '6vh',
+          left: '6vw',
+          zIndex: 20,
+          opacity: frameState.sequence === 1 ? 1 : 0,
+          transition: 'opacity 300ms ease',
+          pointerEvents: 'none',
+        }}
+      >
+        <div
+          style={{
+            fontSize: '64px',
+            fontWeight: 700,
+            letterSpacing: '-0.04em',
+            color: '#ffffff',
+            textShadow: '0 6px 24px rgba(0, 0, 0, 0.6)',
+          }}
+        >
+          Transcripter AI
+        </div>
+      </div>
     </div>
   );
 };
