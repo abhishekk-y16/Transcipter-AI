@@ -1,4 +1,4 @@
-# 🎤 AI-Powered Real-Time Transcription & Intelligence System
+# 🎤 AI-Powered Real-Time Transcription & Intelligence System 
 
 > A production-grade, startup-quality system that transforms conversations into actionable intelligence.
 
