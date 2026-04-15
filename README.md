@@ -16,7 +16,7 @@ This isn't just speech-to-text. It's a complete conversation intelligence platfo
 - 📝 **Generates ACTIONABLE** insights (summaries & action items)
 - 💬 **Answers QUESTIONS** about conversations (AI chatbot)
 
-## ✨ Key Features
+## ✨ Key Features 
 
 - **High-Accuracy Transcription**: 95%+ accuracy using OpenAI Whisper
 - **Speaker Identification**: Automatic speaker diarization with Pyannote
