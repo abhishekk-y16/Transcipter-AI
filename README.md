@@ -143,7 +143,7 @@ ai-transcription-intelligence/
 │   │   └── main.jsx       # Entry point
 │   └── package.json       # Node dependencies
 │
-├── docker-compose.yml     # Docker orchestration
+├── docker-compose.yml     # Docker  orchestration
 ├── ARCHITECTURE.md        # System architecture docs
 ├── SETUP.md              # Setup instructions
 └── FEATURES.md           # Feature documentation
