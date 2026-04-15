@@ -39,7 +39,7 @@ docker-compose up -d
 # Open http://localhost:3000
 ```
 
-### 🛠️ Manual Setup
+### 🛠️ Manual Setup 
 ```bash
 # Backend
 cd backend
