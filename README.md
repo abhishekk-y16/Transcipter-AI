@@ -1,6 +1,6 @@
 # 🎤 AI-Powered Real-Time Transcription & Intelligence System      
 
-> A production-grade, startup-quality system that transforms conversations into actionable intelligence.
+> A production-grade, startup-quality system that transforms conversations into actionable intelligence. 
 
 [![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://www.python.org/)
 [![React](https://img.shields.io/badge/React-18-61dafb.svg)](https://reactjs.org/)
