@@ -7,7 +7,7 @@
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.109-009688.svg)](https://fastapi.tiangolo.com/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-## 🌟 What Makes This Special
+## 🌟 What Makes This Special 
 
 This isn't just speech-to-text. It's a complete conversation intelligence platform that:
 - 🎯 **Understands WHO** is speaking (speaker diarization)
