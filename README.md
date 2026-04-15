@@ -29,7 +29,7 @@ This isn't just speech-to-text. It's a complete conversation intelligence platfo
 - **Real-Time Streaming**: Live transcription via WebSocket
 - **Searchable Database**: Store and search all transcriptions
 
-## 🚀 Quick Start
+## 🚀 Quick Start 
 
 **Choose your path:**
 
