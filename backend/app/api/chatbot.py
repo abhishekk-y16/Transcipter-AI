@@ -1,6 +1,6 @@
 """
 Chatbot API endpoints
-Allows users to ask questions about transcripts
+Allows users to ask questions about transcripts 
 """
 from fastapi import APIRouter, HTTPException
 from app.models.schemas import ChatMessage, ChatResponse
