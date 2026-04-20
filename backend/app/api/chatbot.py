@@ -35,7 +35,7 @@ async def ask_question(message: ChatMessage):
         ])
         
         # Get answer from chatbot
-        chatbot = get_chatbot_service()
+        chatbot = get_chatbot_service() 
         result = chatbot.answer_question(
             message.question,
             transcript,
