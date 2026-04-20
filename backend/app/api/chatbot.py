@@ -28,7 +28,7 @@ async def ask_question(message: ChatMessage):
         if not session:
             raise HTTPException(status_code=404, detail="Session not found")
         
-        # Build full transcript
+        # Build full transcript 
         transcript = "\n".join([
             f"{seg['speaker']} ({seg['start_time']:.1f}s): {seg['text']}"
             for seg in session['segments']
