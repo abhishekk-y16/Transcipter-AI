@@ -49,8 +49,8 @@ async def upload_audio(file: UploadFile = File(...)):
         
         logger.info(f"Processing audio file: {file.filename}")
         
-        # Step 1: Transcribe audio
-        transcription_service = get_transcription_service()
+        # Step 1: Transcribe audio 
+        transcription_service = get_transcription_service() 
         transcription_result = transcription_service.transcribe_audio(file_path)
         
         # Step 2: Detect emotions for each segment
