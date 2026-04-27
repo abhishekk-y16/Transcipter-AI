@@ -6,7 +6,7 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware 
 from app.core.config import settings 
-from app.api import transcription, analytics, chatbot, export
+from app.api import transcription, analytics, chatbot, export 
 from app.core.database import connect_to_mongo, close_mongo_connection
 
 app = FastAPI(
