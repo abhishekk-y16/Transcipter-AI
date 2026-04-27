@@ -42,7 +42,7 @@ async def root():
         "version": "1.0.0"
     }
 
-# Include routers 
+# Include routers  
 app.include_router(transcription.router, prefix="/api/transcription", tags=["Transcription"])
 app.include_router(analytics.router, prefix="/api/analytics", tags=["Analytics"])
 app.include_router(chatbot.router, prefix="/api/chatbot", tags=["Chatbot"])
