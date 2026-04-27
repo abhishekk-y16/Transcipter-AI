@@ -33,7 +33,7 @@ async def startup_db_client():
 async def shutdown_db_client():
     await close_mongo_connection()
 
-# Health check
+# Health check 
 @app.get("/")
 async def root():
     return {
