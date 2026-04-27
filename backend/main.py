@@ -35,7 +35,7 @@ async def shutdown_db_client():
 
 # Health check 
 @app.get("/")
-async def root():
+async def root(): 
     return {
         "status": "online",
         "service": "AI Transcription Intelligence System",
