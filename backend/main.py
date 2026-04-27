@@ -2,7 +2,7 @@
 AI-Powered Real-Time Transcription & Intelligence System
 Main FastAPI application entry point 
 """
-import uvicorn
+import uvicorn 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
