@@ -13,7 +13,7 @@ app = FastAPI(
     title="AI Transcription Intelligence System",
     description="Production-grade real-time transcription with AI insights",
     version="1.0.0"
-)
+) 
 
 # CORS middleware for frontend communication 
 app.add_middleware(
