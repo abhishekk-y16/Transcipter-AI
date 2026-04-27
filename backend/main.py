@@ -24,7 +24,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Database lifecycle
+# Database lifecycle 
 @app.on_event("startup")
 async def startup_db_client():
     await connect_to_mongo() 
