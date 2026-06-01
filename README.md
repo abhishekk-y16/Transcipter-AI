@@ -12,7 +12,7 @@
 This isn't just speech-to-text. It's a complete conversation intelligence platform that:
 - 🎯 **Understands WHO** is speaking (speaker diarization)
 - 😊 **Detects HOW** they're feeling (emotion analysis)
-- 🔍 **Knows WHAT** matters (keyword extraction)
+- 🔍 **Knows WHAT** matters (keyword extraction) 
 - 📝 **Generates ACTIONABLE** insights (summaries & action items)
 - 💬 **Answers QUESTIONS** about conversations (AI chatbot) 
 
