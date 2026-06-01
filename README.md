@@ -33,7 +33,7 @@ This isn't just speech-to-text. It's a complete conversation intelligence platfo
 
 **Choose your path:**
 
-### 🏃 Fastest (5 minutes)
+### 🏃 Fastest (5 minutes) 
 ```bash
 docker-compose up -d
 # Open http://localhost:3000
