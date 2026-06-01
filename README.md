@@ -54,7 +54,7 @@ npm install
 npm run dev
 ```
 
-**📖 Detailed Guide**: See [GET_STARTED.md](GET_STARTED.md) or [QUICK_START.md](QUICK_START.md)
+**📖 Detailed Guide**: See [GET_STARTED.md](GET_STARTED.md) or [QUICK_START.md](QUICK_START.md) 
 
 ## 📚 Documentation 
 
