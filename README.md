@@ -24,7 +24,7 @@ This isn't just speech-to-text. It's a complete conversation intelligence platfo
 - **AI Summaries**: Generate meeting summaries and action items
 - **Smart Analytics**: Speaking time, emotion distribution, conversation intensity
 - **AI Chatbot**: Ask questions about your transcripts
-- **Multi-Language**: Support for 99 languages
+- **Multi-Language**: Support for 99 languages 
 - **Export System**: PDF, DOCX, TXT with professional formatting
 - **Real-Time Streaming**: Live transcription via WebSocket
 - **Searchable Database**: Store and search all transcriptions
