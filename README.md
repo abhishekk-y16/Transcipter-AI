@@ -14,7 +14,7 @@ This isn't just speech-to-text. It's a complete conversation intelligence platfo
 - 😊 **Detects HOW** they're feeling (emotion analysis)
 - 🔍 **Knows WHAT** matters (keyword extraction)
 - 📝 **Generates ACTIONABLE** insights (summaries & action items)
-- 💬 **Answers QUESTIONS** about conversations (AI chatbot)
+- 💬 **Answers QUESTIONS** about conversations (AI chatbot) 
 
 ## ✨ Key Features 
 
